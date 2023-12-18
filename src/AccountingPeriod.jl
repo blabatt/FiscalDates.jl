@@ -27,19 +27,20 @@ end
 
 
 depth(ap::AccountingPeriod,d::Integer=0) = ap.duration == FiscalYear ? d : depth(ap.parent,d+1)
-root(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : root(ap.parent)
+FY(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : FY(ap.parent)
+parent(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : ap.parent
 
 
 
 isleap(ap::AccountingPeriod) = fc_52or53wks(ap) == 53
 
 
-function fiscalyear(ap::AccountingPeriod)::Int64
-	ap.duration ∈ (CalendarYear, FiscalYear) ? ap.index : 
-	fiscalyear(ap.parent)
-end
-
-
+# function fiscalyear(ap::AccountingPeriod)::Int64
+# 	ap.duration ∈ (CalendarYear, FiscalYear) ? ap.index : 
+# 	fiscalyear(ap.parent)
+# end
+# 
+# 
 function quarterofFY(ap::AccountingPeriod)
 	if ap.parent.duration ∈ (CalendarYear, FiscalYear) 
 		ap.duration ∈ (CalendarQuarter, FiscalQuarter)  ? ap.index           :
@@ -63,7 +64,7 @@ end
 
 
 function Base.isless(ap1::AccountingPeriod{C,D1},ap2::AccountingPeriod{C,D2}) where{C,D1,D2}
-	ap1fy = root(ap1).index; ap2fy = root(ap2).index
+	ap1fy = FY(ap1).index; ap2fy = FY(ap2).index
 	ap1fy ≠ ap2fy   ? ap1fy < ap2fy                      : 
 	D1 == D2        ? offsetofFY(ap1) < offsetofFY(ap2)  :
 	                  offsetofFY(ap1) < offsetofFY(ap2) # TODO: BUG: (?) comparing offsets of different durations?!
@@ -94,18 +95,18 @@ end
 
 
 function firstday(ap::AccountingPeriod{C,FiscalYear})::Date where {C}
-	lastday(AccountingPeriod{C}(fiscalyear(ap)-1,FiscalYear)) + Dates.Day(1) 
+	lastday(AccountingPeriod{C}(FY(ap).index-1,FiscalYear)) + Dates.Day(1) 
 end
 
 
 function firstday(ap::AccountingPeriod{C,FiscalQuarter})::Date where {C}
-	firstday( root(ap) ) +                   # first day of FY
+	firstday( FY(ap) ) +                   # first day of FY
 	Dates.Day( (quarterofFY(ap) - 1) * (13 * 7) )   # offset of days in preceeding quarters
 end
 
 
 function firstday(ap::AccountingPeriod{C,FiscalWeek})::Date where {C}
-	firstday(root(ap)) +          # first day of FY
+	firstday(FY(ap)) +          # first day of FY
 	(weekofFY(ap) - 1) *          # weeks since 1st week in FY
 	Dates.Day(7)                  # days in a week
 end

@@ -43,8 +43,8 @@ fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)
 @test lastday(fy2022w51)                      == Date(2022,7,23)              
 @test firstday(fy2022q4)                      == Date(2022,5,01)              
 @test lastday(fy2022q4p3w2)                   == Date(2022,7,09)              
-@test FiscalDates.fiscalyear(fy2024)          == 2024                         
-@test FiscalDates.fiscalyear(fy2022q4p3)      == 2022                         
+@test FiscalDates.FY(fy2024)                  == fy2024                         
+@test FiscalDates.FY(fy2022q4p3)              == fy2022                         
 @test FiscalDates.quarterofFY(fy2022q4p3w2)   == 4                            
 @test FiscalDates.periodofFY(fy2022q4p3w2)    == 12                           
 @test FiscalDates.periodofFY(fy2022q4p3)      == 12                           
@@ -127,8 +127,8 @@ fy2022q4p3w2   = AccountingPeriod{cal}(2,FiscalWeek,fy2022q4p3)
 @test firstday(fy2022q4)                      == Date(2021,12,2)      
 @test firstday(fy2022q4p3)                    == Date(2022,1,27)      
 @test lastday(fy2022q4p3w2)                   == Date(2022,2,9)       
-@test FiscalDates.fiscalyear(fy2025)          == 2025                
-@test FiscalDates.fiscalyear(fy2022q4p3)      == 2022                
+@test FiscalDates.FY(fy2025)                  == fy2025
+@test FiscalDates.FY(fy2022q4p3)              == fy2022                
 @test FiscalDates.quarterofFY(fy2023q3)       == 3                   
 @test FiscalDates.periodofFY(fy2022q4p3)      == 12                 
 @test FiscalDates.weekofFY(fy2022w51)         == 51                  
