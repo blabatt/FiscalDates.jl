@@ -56,7 +56,14 @@ end
 """
     abstract type FiscalCalendar
 
-Concrete implementations may be parametric, such as [`FiscalCalGregorian`](@ref), parameterized by a specific `Date` and [`FiscalCal445`](@ref), parameterized by an ending month as well as a couple other factors, or the may be singleton types, such as [`FiscalCalISO`](@ref) and [`FiscalCalBroadcast]`(@ref). In either case, significant work must be done to implement a new `FiscalCalendar`. The following functions must have method implementations specific to the concrete type: [`lastdayofFY`](@ref), [`fc_52or53wks`](@ref), [`fc_13or14wks`](@ref), [`fc_4or5wks`](@ref), [`QofFY`](@ref), [`QofFY`](@ref), [`periodofFY`](@ref), [`weekofFY`](@ref). Unfortunately, these functions cannot be generically implemented across all `FiscalCalendar`s due to the highly irregular logic of these calendaring systems, in general.
+Concrete implementations may be parametric, such as [`FiscalCalGregorian`](@ref), parameterized by a specific `Date` and [`FiscalCal445`](@ref), parameterized by an ending month as well as a couple other factors, or the may be singleton types, such as [`FiscalCalISO`](@ref) and [`FiscalCalBroadcast]`(@ref). In either case, significant work must be done to implement a new `FiscalCalendar`. 
+
+The following functions must have method implementations specific to the new concrete type (here called `NEW_C`): 
+* `lastday(::AccountingPeriod{NEW_C,FiscalYear})`
+* [`periodofFY`](@ref)
+* [`weekofFY`](@ref) 
+
+Unfortunately, these functions cannot be generically implemented across all `FiscalCalendar`s due to the highly irregular logic of these calendaring systems, in general.
 
 See a discussion of various calendars, including several not used for fiscal purposes and so not implemented here, such as the Mayan calendar, [here](https://www.fourmilab.ch/documents/calendar/).
 """

@@ -175,8 +175,7 @@ end
 
 
 function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal5253}
-	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = mod1(P,3)
-	println("Q: ",Q,"\tP: ",P,"\tPofQ: ",PofQ)
+	Q = quarterofFY(ap); P = periodofFY(ap)
 	firstday( FY(ap) ) +                 # first day of FY
 	Dates.Week(													 # weeks since beginning of FY
 						 sum(perioddurations(ap)[1:P-1])
