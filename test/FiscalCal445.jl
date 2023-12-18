@@ -36,62 +36,62 @@ fy2027p2w4     = AccountingPeriod{cal}(4,FiscalWeek,fy2027p2)
 fy2027p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2027p12)  
 fy2022p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2022p12)  
 fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)  
-@test lastday(fy2022).d2                      == Date(2022,7,30)      skip=true         
-@test firstday(fy2024).d1                     == Date(2023,7,30)      skip=true         
-@test lastday(fy2023q3).d2                    == Date(2024,4,27)      skip=true         
-@test lastday(fy2022w51).d2                   == Date(2023,7,22)      skip=true         
-@test firstday(fy2022q4).d1                   == Date(2023,4,30)      skip=true         
-@test firstday(fy2022q4p3).d1                 == Date(2023,7,2)       skip=true 
-@test lastday(fy2022q4p3w2).d2                == Date(2023,7,15)      skip=true
+@test firstday(fy2022q4p3)                    == Date(2022,6,26)
+@test lastday(fy2022)                         == Date(2022,7,30)              
+@test firstday(fy2024)                        == Date(2023,7,30)              
+@test lastday(fy2023q3)                       == Date(2023,4,29)              
+@test lastday(fy2022w51)                      == Date(2022,7,23)              
+@test firstday(fy2022q4)                      == Date(2022,5,01)              
+@test lastday(fy2022q4p3w2)                   == Date(2022,7,09)              
 @test FiscalDates.fiscalyear(fy2024)          == 2024                         
 @test FiscalDates.fiscalyear(fy2022q4p3)      == 2022                         
 @test FiscalDates.quarterofFY(fy2022q4p3w2)   == 4                            
 @test FiscalDates.periodofFY(fy2022q4p3w2)    == 12                           
 @test FiscalDates.periodofFY(fy2022q4p3)      == 12                           
-@test FiscalDates.periodofFY(fy2023q3p1)      == 7                           
+@test FiscalDates.periodofFY(fy2023q3p1)      == 7                            
 @test FiscalDates.periodofFY(fy2027q4p2)      == 11                           
-@test FiscalDates.weekofFY(fy2022w51)         == 51
-@test FiscalDates.weekofFY(fy2027w53)         == 53
-@test FiscalDates.weekofFY(fy2027p12w2)       == 50                         
-@test FiscalDates.weekofFY(fy2022p12w2)       == 49                         
-@test FiscalDates.weekofFY(fy2027q4w2)        == 41                         
-@test FiscalDates.weekofFY(fy2022q4w2)        == 41                         
-@test FiscalDates.weekofFY(fy2022q4p3w2)      == 49
-@test FiscalDates.weekofFY(fy2027q4p3w2)      == 50                         
-@test FiscalDates.weekofFY(fy2027q4p2w2)      == 45                         
+@test FiscalDates.weekofFY(fy2022w51)         == 51                           
+@test FiscalDates.weekofFY(fy2027w53)         == 53                           
+@test FiscalDates.weekofFY(fy2027p12w2)       == 50                           
+@test FiscalDates.weekofFY(fy2022p12w2)       == 49                           
+@test FiscalDates.weekofFY(fy2027q4w2)        == 41                           
+@test FiscalDates.weekofFY(fy2022q4w2)        == 41                           
+@test FiscalDates.weekofFY(fy2022q4p3w2)      == 49                           
+@test FiscalDates.weekofFY(fy2027q4p3w2)      == 50                           
+@test FiscalDates.weekofFY(fy2027q4p2w2)      == 45                           
 @test FiscalDates.firstday(fy2024)            == Date(2023,7,30)              
-@test FiscalDates.lastday(fy2022q4p3)         == Date(2022,7,30)              skip=true
+@test FiscalDates.lastday(fy2022q4p3)         == Date(2022,7,30)              
 @test FiscalDates.lastmonthofFY(fy2024)       == 7                             
 @test FiscalDates.lastmonthofFY(fy2022q4p3)   == 7                             
 @test FiscalDates.lastdowofFY(fy2024)         == Saturday                      
-@test FiscalDates.lastdowofFY(fy2022q4p3)     == Saturday                      
+@test FiscalDates.lastdowofFY(fy2022q4p3)     == Saturday                       
 @test FiscalDates.usinglastdayinCMlogic(fy2024)         == true                         
 @test FiscalDates.usinglastdayinCMlogic(fy2022q4p3w2)   == true                         
-@test FiscalDates.fc_52or53wks(fy2022)        == 52                           
-@test FiscalDates.fc_52or53wks(fy2027)        == 53                           
-@test FiscalDates.fc_13or14wks(fy2022q4)      == 13                           
-@test FiscalDates.fc_13or14wks(fy2023q3)      == 13                           
-@test FiscalDates.fc_13or14wks(fy2027q4)      == 14                           
-@test FiscalDates.fc_4or5wks(fy2022q4p3)      == 5                            
-@test FiscalDates.fc_4or5wks(fy2023q3p1)      == 4                            
-@test FiscalDates.fc_4or5wks(fy2027q4p2)      == 5                            
-@test FiscalDates.offsetofFY(fy2027q4w2)      == 41
+@test FiscalDates.fc_52or53wks(fy2022)        == 52                             
+@test FiscalDates.fc_52or53wks(fy2027)        == 53                               
+@test FiscalDates.fc_13or14wks(fy2022q4)      == 13                               
+@test FiscalDates.fc_13or14wks(fy2023q3)      == 13                               
+@test FiscalDates.fc_13or14wks(fy2027q4)      == 14                               
+@test FiscalDates.fc_4or5wks(fy2022q4p3)      == 5                                
+@test FiscalDates.fc_4or5wks(fy2023q3p1)      == 4                                
+@test FiscalDates.fc_4or5wks(fy2027q4p2)      == 5                               
+@test FiscalDates.offsetofFY(fy2027q4w2)      == 41                                  
 @test (fy2022 < fy2022)                       == false                              
 @test (fy2022 < fy2023)                       == true                             
-@test (fy2022w51 < fy2023)                    == true
+@test (fy2022w51 < fy2023)                    == true                               
 @test (fy2022w51 < fy2027w53)                 == true                             
 @test (fy2022w51 < fy2027w40)                 == true                             
 @test (fy2022p12w2 < fy2022w51)               == true                             
-@test (fy2027q4p2w2 < fy2027p12w2)            == true
-@test (fy2023q3 < fy2023q3p1) 	              == true
-@test (fy2027q3 < fy2027p2w4)                 == false
-@test next(fy2022)                            == fy2023
-@test next(fy2022p12w2)                       == fy2022p12w3
-@test next(fy2022q3)                          == fy2022q4
-@test next(fy2027w53)                         == fy2028w1 
-for ap in AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
-	println("FY", FiscalDates.root(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
-end
+@test (fy2027q4p2w2 < fy2027p12w2)            == true                             
+@test (fy2023q3 < fy2023q3p1) 	              == true                             
+@test (fy2027q3 < fy2027p2w4)                 == false                              
+@test next(fy2022)                            == fy2023                             
+@test next(fy2022p12w2)                       == fy2022p12w3                             
+@test next(fy2022q3)                          == fy2022q4                             
+@test next(fy2027w53)                         == fy2028w1                              
+# for ap in AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
+# 	println("FY", FiscalDates.root(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
+# end
 
 
 # Another parameterization of `FiscalCal445`
@@ -120,13 +120,13 @@ fy2027w53      = AccountingPeriod{cal}(53,FiscalWeek,fy2027)
 fy2022q4       = AccountingPeriod{cal}(4,FiscalQuarter,fy2022)
 fy2022q4p3     = AccountingPeriod{cal}(3,FiscalPeriod,fy2022q4)
 fy2022q4p3w2   = AccountingPeriod{cal}(2,FiscalWeek,fy2022q4p3)
-@test lastday(fy2022)                         == Date(2022,3,2)      skip=true 
-@test firstday(fy2025)                        == Date(2025,2,27)     skip=true 
-@test lastday(fy2023q3).d2                    == Date(2023,11,28)    skip=true 
-@test lastday(fy2022w51).d2                   == Date(2024,2,20)     skip=true 
-@test firstday(fy2022q4).d1                   == Date(2021,12,2)     skip=true 
-@test firstday(fy2022q4p3).d1                 == Date(2022,1,27)     skip=true 
-@test lastday(fy2022q4p3w2).d2                == Date(2022,2,9)      skip=true 
+@test lastday(fy2022)                         == Date(2022,3,2)       
+@test firstday(fy2025)                        == Date(2024,2,29)      
+@test lastday(fy2023q3)                       == Date(2022,11,30)     
+@test lastday(fy2022w51)                      == Date(2022,2,23)      
+@test firstday(fy2022q4)                      == Date(2021,12,2)      
+@test firstday(fy2022q4p3)                    == Date(2022,1,27)      
+@test lastday(fy2022q4p3w2)                   == Date(2022,2,9)       
 @test FiscalDates.fiscalyear(fy2025)          == 2025                
 @test FiscalDates.fiscalyear(fy2022q4p3)      == 2022                
 @test FiscalDates.quarterofFY(fy2023q3)       == 3                   

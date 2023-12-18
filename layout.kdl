@@ -16,7 +16,7 @@ layout {
     }
     tab name="FiscalDates" cwd="/home/blabattiii/Projects/vesta/microgrids/FiscalDates" {
 		floating_panes {
-			pane cwd="/home/blabattiii/Projects/vesta/microgrids/Proforma" name="terminal" {
+			pane cwd="/home/blabattiii/Projects/vesta/microgrids/FiscalDates" name="terminal" {
 				x "25%"
 				y "25%"
 				width "50%"
@@ -31,7 +31,7 @@ layout {
 				}
 				pane cwd="./test" name="testing" {
 					command "nvim"
-					args "runtests.jl" "test_accountingdates.jl"
+					args "runtests.jl" "FiscalCal445.jl" "FiscalCalGregorian.jl" "FiscalCalISO.jl" "FiscalCalBroadcast.jl"
 				}
 				pane cwd="./" name="environment" {
 					command "nvim"

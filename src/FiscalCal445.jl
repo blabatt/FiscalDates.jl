@@ -2,6 +2,7 @@ import Base.isless, Base.iterate
 
 export FiscalYearend, LastIn, ClosestTo
 export FiscalCal445
+export firstday
 
 """
     @enum FiscalYearend begin
@@ -24,7 +25,7 @@ lastdowofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D} = C.parameters[
 usinglastdayinCMlogic(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D} = C.parameters[3] == LastIn 
 
 
-function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal445} # non-generic!!
+function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal445} 
 	fy = fiscalyear(ap); m = lastmonthofFY(ap); dow = lastdowofFY(ap)
 	ds = Date(fy,m,1); dl = ds + Dates.Day(daysinmonth(ds) - 1); Δ = dayofweek(dl) - dow
 	if usinglastdayinCMlogic(ap)
@@ -56,10 +57,10 @@ function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D}
 		if dur ∈ (CalendarMonth, FiscalPeriod) 
 			idx 
 		elseif dur ∈ (CalendarWeek, FiscalWeek)    
-			wk_of_Q  = idx == 53 ? 14 : (idx%13)+1
-			Q_offset = idx == 53 ? 4  : fld(idx,13)
-			(fc_52or53wks(ap) == 53 && idx == 44) ? 11 :             # ← the only week that changes, during a leap
-			Q_offset * 13 + (wk_of_Q ≤ 4 ? 1 : wk_of_Q ≤ 8 ? 2 : 3)  # year, from the (happy-path) logic on this line.
+			WofQ  = idx == 53 ? 14 : mod1(idx,13)
+			Q = idx == 53 ? 4 : cld(idx,13)
+			PofQ = isleap(ap) && idx == 48 ? 2 : WofQ == 13 ? 3 : cld(WofQ,4) 
+			(Q-1) * 3 + PofQ
 		end
 	else
 		periodofFY(ap.parent)
@@ -72,16 +73,27 @@ end
 Returns the number of weeks in the given [`AccountingPeriod`](@ref).
 """
 function fc_13or14wks(ap::AccountingPeriod{C,FiscalQuarter}) where {C<:FiscalCal445}
-	fc_52or53wks(ap.parent) == 52 ? 13 : 
-	ap.index == 4                 ? 14 : 
+	QofFY = ap.index
+	if ap.parent.duration != FiscalYear
+		error("Unrecognized `ap` structure.")
+	end
+	!isleap(ap)  ? 13 : 
+	QofFY == 4   ? 14 : 
 	13
 end
 
 function fc_4or5wks(ap::AccountingPeriod{C,FiscalPeriod}) where {C<:FiscalCal445}
-	(ap.index % 3) == 0                   ? 5 :	
-	fc_52or53wks(ap.parent) == 52         ? 4 :					 
-	periodofFY(ap) == 11                  ? 5 : 
-	4  
+	if ap.parent.duration == FiscalQuarter
+		PofQ = ap.index; PofFY = (ap.parent.index - 1) * 3 + PofQ
+	elseif ap.parent.duration == FiscalYear
+		PofFY = ap.index; Q = cld(PofFY,3); PofQ = mod1(PofFY,3)
+	else
+		error("Unrecognized `ap` structure.")
+	end
+	PofQ == 1                 ? 4 :
+	PofQ == 3                 ? 5 : 
+	isleap(ap) && PofFY == 11 ? 5 :
+															4
 end
 
 
@@ -98,7 +110,7 @@ function weekofFY(ap::AccountingPeriod{C,FiscalWeek}) where {C<:FiscalCal445}
 	elseif ap.parent.duration == FiscalPeriod
 		is12Pinleap = isleap(ap) && ap.parent.index == 12    
 		P = ap.parent.index; Q = fld(P,3) # Period and Quarter we're in
-		idx + (Q-1)*13 + (m = (P-1)%3; m == 0 ? 0 : m == 1 ? 4 : 8 + (is12Pinleap ? 1 : 0))
+		idx + (Q-1)*13 + (PofQ = mod1(P,3); PofQ == 1 ? 0 : PofQ == 2 ? 4 : 8 + (is12Pinleap ? 1 : 0))
 	elseif pdur ∈ (CalendarQuarter, FiscalQuarter)
 		idx + 13 * (ap.parent.index - 1)
 	else
@@ -108,15 +120,15 @@ end
 
 
 
-function firstday(ap::AccountingPeriod{<:FiscalCal445,FiscalPeriod})::Date  # non-generic!
-	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = P % 3 + 1
+function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal445}
+	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = mod1(P,3)
+	println("Q: ",Q,"\tP: ",P,"\tPofQ: ",PofQ)
 	firstday( root(ap) ) +                 # first day of FY
-	Dates.Day(                             # days from first of FY to first of this FQ
-					 (Q - 1) *                     # Quarters before the present one ×
-						13 *                         # 13 weeks per Q (true ∀ except last Q) ×
-						7                            # 7 days per week
-						) +
-	Dates.Day(                             # days from first of FQ to first of this period
+	Dates.Week(                            # days from first of FY to first of this FQ
+					 (Q - 1) *                         # Quarters before the present one ×
+						13                               # 13 weeks per Q (true ∀ except last Q) ×
+						) + 
+	Dates.Week(                            # days from first of FQ to first of this period
 						isleap(ap) && P == 12 ? 9 :      # P11 of a leap year (uncharacteristically) has 5 wks
 						(PofQ - 1) * 4                   # otherwise, 4wks in first two periods of any Quarter 
 						)

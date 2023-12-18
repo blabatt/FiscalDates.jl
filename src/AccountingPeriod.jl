@@ -2,6 +2,7 @@ import Base.isless, Base.iterate
 
 export AccountingPeriod
 export next, timeframe
+export firstday
 
 
 """
@@ -28,10 +29,6 @@ end
 depth(ap::AccountingPeriod,d::Integer=0) = ap.duration == FiscalYear ? d : depth(ap.parent,d+1)
 root(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : root(ap.parent)
 
-
-function firstday(ap::AccountingPeriod{C,FiscalYear})::Date where {C}
-	lastday(AccountingPeriod{C}(fiscalyear(ap)-1,FiscalYear)) + Dates.Day(1) 
-end
 
 
 isleap(ap::AccountingPeriod) = fc_52or53wks(ap) == 53
@@ -94,6 +91,12 @@ function next(ap::AccountingPeriod{C,D}) where {C,D}
 		dur,np)                                                         :
 	error(e)
 end
+
+
+function firstday(ap::AccountingPeriod{C,FiscalYear})::Date where {C}
+	lastday(AccountingPeriod{C}(fiscalyear(ap)-1,FiscalYear)) + Dates.Day(1) 
+end
+
 
 function firstday(ap::AccountingPeriod{C,FiscalQuarter})::Date where {C}
 	firstday( root(ap) ) +                   # first day of FY

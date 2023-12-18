@@ -26,23 +26,6 @@ jobs:
       with:
         version: '1.9'
     - uses: julia-actions/julia-buildpkg@v1
-    - name: verify CI environment
-      run: |
-        echo ${{ github.workflow }} 
-        julia -e '@show get(ENV, "JULIA_CI", "nothing") == "true"'
-    - uses: actions/checkout@v4
-      with: 
-        repository: 'ledger/ledger.git'
-        ref: 'master'
-        path: 'ledger'
-        token: ${{ github.token }}
-    - name: Configure Ledger-CLI
-      run: | 
-        cd ledger 
-        sudo apt-get install build-essential cmake doxygen libboost-system-dev libboost-dev python3-dev gettext git libboost-date-time-dev libboost-filesystem-dev libboost-iostreams-dev libboost-python-dev libboost-regex-dev libboost-test-dev libedit-dev libgmp3-dev libmpfr-dev texinfo tzdata
-        ./acprep update  # Update to the latest, configure, make
-        sudo make install
-        ledger --version
     - uses: julia-actions/julia-runtest@v1
     - uses: julia-actions/julia-processcoverage@v1
     - uses: codecov/codecov-action@v3
