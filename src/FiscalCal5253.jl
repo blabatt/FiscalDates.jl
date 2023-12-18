@@ -87,18 +87,3 @@ end
 
 
 
-function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal5253}
-	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = mod1(P,3)
-	println("Q: ",Q,"\tP: ",P,"\tPofQ: ",PofQ)
-	firstday( FY(ap) ) +                 # first day of FY
-	Dates.Week(                            # days from first of FY to first of this FQ
-					 (Q - 1) *                         # Quarters before the present one ×
-						13                               # 13 weeks per Q (true ∀ except last Q) ×
-						) + 
-	Dates.Week(                            # days from first of this Q to first of this P
-						isleap(ap) && P == 12 ? 9 :      # P11 of a leap year (uncharacteristically) has 5 wks
-						(PofQ - 1) * 4                   # otherwise, 4wks in first two periods of any Quarter 
-						)
-end
-
-

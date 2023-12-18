@@ -149,7 +149,7 @@ function periodicity(ap::AccountingPeriod{C,D}) where {C,D}
 end
 
 
-function perioddurations(ap::AccountingPeriod, leap::Bool)
+function perioddurations(ap::AccountingPeriod)
 	if periodicity(ap) == ThirteenPeriods
 		!isleap(ap) ? repeat([4],13) : [4,4,4,4,4,4,4,4,4,4,4,4,5]
 	elseif periodicity(ap) == FourFourFive
@@ -170,6 +170,17 @@ function fc_4or5wks(ap::AccountingPeriod{C,FiscalPeriod}) where {C}
 	else
 		error("Unrecognized `ap` structure.")
 	end
-	perioddurations(ap,isleap(ap))[PofFY]
+	perioddurations(ap)[PofFY]
 end
+
+
+function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal5253}
+	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = mod1(P,3)
+	println("Q: ",Q,"\tP: ",P,"\tPofQ: ",PofQ)
+	firstday( FY(ap) ) +                 # first day of FY
+	Dates.Week(													 # weeks since beginning of FY
+						 sum(perioddurations(ap)[1:P-1])
+						 ) 
+end
+
 
