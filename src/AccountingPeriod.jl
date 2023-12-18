@@ -3,6 +3,7 @@ import Base.isless, Base.iterate
 export AccountingPeriod
 export next, timeframe
 export firstday
+export periodicity
 
 
 """
@@ -116,4 +117,59 @@ function lastday(ap::AccountingPeriod{C,D})::Date where{C,D}
 	firstday( next(ap) ) - Dates.Day(1)
 end
 
+
+function fc_52or53wks(ap::AccountingPeriod{C,D}) where {C,D}
+	lastday(FY(ap)) - firstday(FY(ap)) == Dates.Day(370) ? 53 : 52
+end
+
+"""
+    fc_13or14wks(::AccountingPeriod{C<:FiscalCal445,FiscalQuarter})
+
+Returns the number of weeks in the given [`AccountingPeriod`](@ref).
+"""
+function fc_13or14wks(ap::AccountingPeriod{C,FiscalQuarter}) where {C}
+	QofFY = quarterofFY(ap) 
+	if ap.parent.duration != FiscalYear
+		error("Unrecognized `ap` structure.")
+	end
+	!isleap(ap)  ? 13 : 
+	QofFY == 4   ? 14 : 
+	13
+end
+
+
+function periodicity(ap::AccountingPeriod{C,D}) where {C,D}
+	if C <: FiscalCalGregorian || C <: FiscalCalBroadcast
+		error("No periods defined for this type of `FiscalCalendar`.")
+	elseif C <: FiscalCal5253
+		C.parameters[4]
+	elseif C <: FiscalCalISO # TODO: parameterize FiscalCalISO calendars in this way
+		C.parameters[1]
+	end
+end
+
+
+function perioddurations(ap::AccountingPeriod, leap::Bool)
+	if periodicity(ap) == ThirteenPeriods
+		!isleap(ap) ? repeat([4],13) : [4,4,4,4,4,4,4,4,4,4,4,4,5]
+	elseif periodicity(ap) == FourFourFive
+		!isleap(ap) ? repeat([4,4,5],4) : vcat(repeat([4,4,5],3),[4,5,5])
+	elseif periodicity(ap) == FourFiveFour
+		!isleap(ap) ? repeat([4,5,4],4) : vcat(repeat([4,5,4],3),[4,5,5])
+	elseif periodicity(ap) == FiveFourFour
+		!isleap(ap) ? repeat([5,4,4],4) : vcat(repeat([5,4,4],3),[5,4,5])
+	end
+end
+
+
+function fc_4or5wks(ap::AccountingPeriod{C,FiscalPeriod}) where {C}
+	if ap.parent.duration == FiscalQuarter
+		PofQ = ap.index; PofFY = periodofFY(ap)
+	elseif ap.parent.duration == FiscalYear
+		PofFY = periodofFY(ap); Q = cld(PofFY,3); PofQ = mod1(PofFY,3) # TODO: Δ Q, PofQ calcs.
+	else
+		error("Unrecognized `ap` structure.")
+	end
+	perioddurations(ap,isleap(ap))[PofFY]
+end
 

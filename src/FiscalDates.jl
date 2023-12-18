@@ -2,6 +2,7 @@ module FiscalDates
 using Dates
 
 export Duration, FiscalYear, CalendarYear, FiscalQuarter, CalendarQuarter, FiscalPeriod, CalendarMonth, FiscalWeek, CalendarWeek
+export PeriodDurations, ThirteenPeriods, FourFourFive, FourFiveFour, FiveFourFour
 export FiscalCalendar, FiscalCal445, FiscalCalGregorian, FiscalCalISO, FiscalCalBroadcast
 export firstday, lastday
 
@@ -34,6 +35,22 @@ Calendar years and months, as well as fiscal years and periods, all stretch over
 end
 
 
+"""
+    @enum PeriodDurations begin
+        ThirteenPeriods
+        FourFourFive
+        FourFiveFour
+        FiveFourFour
+    end
+
+The periodicity of the durations, in weeks, of successive [`FiscalPeriod`](@ref)s in a [`FiscalYear`](@ref).
+"""
+@enum PeriodDurations begin
+  ThirteenPeriods
+  FourFourFive
+  FourFiveFour
+  FiveFourFour
+end
 
 
 """
@@ -49,13 +66,13 @@ abstract type FiscalCalendar end
 
 
 """
-    struct FiscalCal445{D,W,T} <: FiscalCalendar
+    struct FiscalCal5253{D,W,T} <: FiscalCalendar
 
-Commonly-used [`FiscalCalendar`](@ref) with two 4 week `AccountingPeriod` and one 5-week ``s per `FiscalQuarter`.
+Commonly-used [`FiscalCalendar`](@ref) with 52 or 53 week periods. 
 
-Parameterized by a day of the week, `D`, a calendar month of the year, `M`, and `T`, a `Bool` that indicates how to terminate each `FiscalYear` given `D` and `M`. See more details [here](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar).
+[`FiscalWeek`](@ref)s always begins on the same day of the week. `FiscalCal5253`s are parameterized by the logic used to determine the final day of any [`FiscalYear`](@ref). These parameters include: a day of the week, `D` that the fiscal year ends on; a calendar month of the year, `M`, that the fiscal year ends on; and `T`, a `Bool` that indicates how to terminate each `FiscalYear` given `D` and `M`. The duration of its [`FiscalPeriod`](@ref)s is indicated by type parameter `P`. See more details [here](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar).
 """
-struct FiscalCal445{D,M,T} <: FiscalCalendar
+struct FiscalCal5253{D,M,T,P} <: FiscalCalendar
 end
 
 
@@ -99,7 +116,7 @@ end
 
 
 include("./AccountingPeriod.jl")
-include("./FiscalCal445.jl")
+include("./FiscalCal5253.jl")
 include("./FiscalCalGregorian.jl")
 include("./FiscalCalISO.jl")
 include("./FiscalCalBroadcast.jl")

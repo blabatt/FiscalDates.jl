@@ -3,7 +3,7 @@ using Dates
 using Test
 
 
-cal            = FiscalCal445{Saturday,July,FiscalDates.LastIn}
+cal            = FiscalCal5253{Saturday,July,LastIn,FourFourFive}
 fy2022         = AccountingPeriod{cal}(2022,FiscalYear)
 fy2023         = AccountingPeriod{cal}(2023,FiscalYear)
 fy2024         = AccountingPeriod{cal}(2024,FiscalYear)
@@ -95,7 +95,7 @@ fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)
 
 
 # Another parameterization of `FiscalCal445`
-cal            = FiscalCal445{Wednesday,February,FiscalDates.ClosestTo}
+cal            = FiscalCal5253{Wednesday,February,ClosestTo,FourFourFive}
 fy2022         = AccountingPeriod{cal}(2022,FiscalYear)
 fy2023         = AccountingPeriod{cal}(2023,FiscalYear)
 fy2025         = AccountingPeriod{cal}(2025,FiscalYear)

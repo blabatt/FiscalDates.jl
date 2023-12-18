@@ -1,7 +1,7 @@
 import Base.isless, Base.iterate
 
 export FiscalYearend, LastIn, ClosestTo
-export FiscalCal445
+export FiscalCal5253
 export firstday
 
 """
@@ -10,7 +10,7 @@ export firstday
         ClosestTo
 		end
 
-Description of how to choose the specific day that terminates the [`FiscalYear`](@ref) of a [`FiscalCal445`](@ref) calendar.
+Description of how to choose the specific day that terminates the [`FiscalYear`](@ref) of a [`FiscalCal5253`](@ref) calendar.
 """
 @enum FiscalYearend begin
 	LastIn
@@ -20,12 +20,12 @@ end
 
 
 
-lastmonthofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D} = C.parameters[2] 
-lastdowofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D} = C.parameters[1]
-usinglastdayinCMlogic(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D} = C.parameters[3] == LastIn 
+lastmonthofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D} = C.parameters[2] 
+lastdowofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D} = C.parameters[1]
+usinglastdayinCMlogic(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D} = C.parameters[3] == LastIn 
 
 
-function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal445} 
+function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal5253} 
 	fy = FY(ap).index; m = lastmonthofFY(ap); dow = lastdowofFY(ap)
 	ds = Date(fy,m,1); dl = ds + Dates.Day(daysinmonth(ds) - 1); Δ = dayofweek(dl) - dow
 	if usinglastdayinCMlogic(ap)
@@ -38,11 +38,7 @@ function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal44
 	end
 end
 
-function fc_52or53wks(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D}
-	lastday(FY(ap)) - firstday(FY(ap)) == Dates.Day(370) ? 53 : 52
-end
-
-function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D}
+function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D}
 	dur = ap.duration
 	if dur ∉ (FiscalPeriod, CalendarMonth, FiscalWeek, CalendarWeek)
 		error("Period not discernable for a `Duration` coarser than `FiscalPeriod`.")
@@ -64,37 +60,8 @@ function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal445,D}
 	end
 end
 
-"""
-    fc_13or14wks(::AccountingPeriod{C<:FiscalCal445,FiscalQuarter})
 
-Returns the number of weeks in the given [`AccountingPeriod`](@ref).
-"""
-function fc_13or14wks(ap::AccountingPeriod{C,FiscalQuarter}) where {C<:FiscalCal445}
-	QofFY = quarterofFY(ap) 
-	if ap.parent.duration != FiscalYear
-		error("Unrecognized `ap` structure.")
-	end
-	!isleap(ap)  ? 13 : 
-	QofFY == 4   ? 14 : 
-	13
-end
-
-function fc_4or5wks(ap::AccountingPeriod{C,FiscalPeriod}) where {C<:FiscalCal445}
-	if ap.parent.duration == FiscalQuarter
-		PofQ = ap.index; PofFY = periodofFY(ap)
-	elseif ap.parent.duration == FiscalYear
-		PofFY = periodofFY(ap); Q = cld(PofFY,3); PofQ = mod1(PofFY,3)
-	else
-		error("Unrecognized `ap` structure.")
-	end
-	PofQ == 1                 ? 4 :
-	PofQ == 3                 ? 5 : 
-	isleap(ap) && PofFY == 11 ? 5 :
-															4
-end
-
-
-function weekofFY(ap::AccountingPeriod{C,FiscalWeek}) where {C<:FiscalCal445}
+function weekofFY(ap::AccountingPeriod{C,FiscalWeek}) where {C<:FiscalCal5253}
 	p = parent(ap)
 	if p.duration ∈ (CalendarYear, FiscalYear)
 		WofFY = ap.index 
@@ -120,7 +87,7 @@ end
 
 
 
-function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal445}
+function firstday(ap::AccountingPeriod{C,FiscalPeriod})::Date where {C<:FiscalCal5253}
 	Q = quarterofFY(ap); P = periodofFY(ap); PofQ = mod1(P,3)
 	println("Q: ",Q,"\tP: ",P,"\tPofQ: ",PofQ)
 	firstday( FY(ap) ) +                 # first day of FY
