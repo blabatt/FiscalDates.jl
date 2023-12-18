@@ -1,0 +1,15 @@
+name = "FiscalDates"
+uuid = "2905af26-c776-4238-8401-0c0e8e7376c2"
+authors = ["Blair Labatt <blabattiii@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

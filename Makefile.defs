@@ -1,0 +1,7 @@
+TEX = pdflatex
+BROWSER = firefox
+MAKE = make
+JULIA = julia
+ACTIVATE = --project=.
+EXECUTE = -e
+
