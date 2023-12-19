@@ -9,11 +9,9 @@
 
 A way to represent fiscal calendars.
 
-![DDD](ddd/DDD-Proforma.png)
 
-
-[cov-i]: https://codecov.io/gh/blabatt/mg-proforma/graph/badge.svg?token=17GZCUYW2N
-[cov-u]: https://codecov.io/gh/blabatt/mg-proforma
+[cov-i]: https://codecov.io/gh/blabatt/FiscalDates.jl/graph/badge.svg?token=17GZCUYW2N
+[cov-u]: https://codecov.io/gh/blabatt/FiscalDates.jl
 [ci-i]: https://github.com/blabatt/mg-proforma/actions/workflows/CI.yml/badge.svg
 [ci-u]: https://github.com/blabatt/mg-proforma/actions?query=workflow%3ACI
 
