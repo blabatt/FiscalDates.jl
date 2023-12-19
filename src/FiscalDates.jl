@@ -24,31 +24,10 @@ Abstract concepts of a time duration with no specifics provided.
 Calendar years and months, as well as fiscal years and periods, all stretch over a varying number of days. As such, these are not strict measurements; they are, rather, context-dependent time durations.
 """
 @enum Duration begin
-"""
-    FiscalYear
 
-A single fiscal year's duration, of varying calendar length.
-"""
 	FiscalYear
-""" 
-    CalendarYear
-
-The customary Gregorian notion of a year.
-"""
 	CalendarYear
-"""
-    FiscalQuarter
-
-Roughly a quarter of a [`FiscalYear`](@ref).
-
-[`FiscalCalendar`](@ref)s customarily contain a integer number of weeks, either 52 or 53. A `FiscalQuarter` then contains 13 weeks for all non leap-years. During a leap year, there is one `FiscalQuarter` of length 14 weeks.
-"""
 	FiscalQuarter
-"""
-    CalendarQuarter
-
-For symmetry with [`FiscalCalendar`](@ref) systems, this is a direct representation of 3 contiguous months of a Gregorian Calendar.
-"""
 	CalendarQuarter
 	FiscalPeriod
 	CalendarMonth
