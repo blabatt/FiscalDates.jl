@@ -1,4 +1,4 @@
-<!--- [![Code Coverage][cov-i]][cov-u]  [![Build Status][ci-i]][ci-u] --->
+[![Code Coverage][cov-i]][cov-u]  [![Build Status][ci-i]][ci-u]
 <!--- [![Documentation][doc-i]][doc-u] ---> <!--- [![Zulip Chat][chat-i]][chat-u] --->
 <!--- the following two may not be needed ... GitHub automatically adds README
       Citation and License links to the RHS of the page for appropriately-named files --->
