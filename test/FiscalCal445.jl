@@ -36,6 +36,7 @@ fy2027p2w4     = AccountingPeriod{cal}(4,FiscalWeek,fy2027p2)
 fy2027p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2027p12)  
 fy2022p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2022p12)  
 fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)  
+ar = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
 @test firstday(fy2022q4p3)                    == Date(2022,6,26)
 @test lastday(fy2022)                         == Date(2022,7,30)              
 @test firstday(fy2024)                        == Date(2023,7,30)              
@@ -89,9 +90,12 @@ fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)
 @test next(fy2022p12w2)                       == fy2022p12w3                             
 @test next(fy2022q3)                          == fy2022q4                             
 @test next(fy2027w53)                         == fy2028w1                              
-# for ap in AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
-# 	println("FY", FiscalDates.root(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
-# end
+@test prev(next(fy2027w53))                   == fy2027w53                             
+@test length(ar)                              == 9 + 12 + 1
+for ap in ar
+	println("FY", FiscalDates.FY(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
+end
+@test repr(ar)                                == "From FY2024P3 to FY2025P12\n"
 
 
 # Another parameterization of `FiscalCal445`

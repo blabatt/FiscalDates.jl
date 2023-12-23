@@ -1,7 +1,7 @@
-import Base.isless, Base.iterate
+import Base.isless, Base.iterate, Base.show
 
 export AccountingPeriod
-export next, timeframe
+export next, prev, timeframe
 export firstday
 export periodicity
 
@@ -26,11 +26,30 @@ struct AccountingPeriod{C,D}
 	AccountingPeriod{FiscalCalGregorian}(i::Int64,d::Duration,p::Union{AccountingPeriod,Nothing}=nothing) = new{FiscalCalGregorian{Date(2023,12,31)},d}(i,d,p)
 end
 
+function Base.show(io::IO,ap::AccountingPeriod) 
+	if isnothing(ap) 
+		s = ""   
+	else 
+		y = string("FY",FY(ap).index);
+    if ap.duration == FiscalYear
+			s = y
+		elseif ap.duration == FiscalQuarter
+			s = y * string("Q",quarterofFY(ap))
+		elseif ap.duration == FiscalPeriod
+			s = y * string("P",periodofFY(ap))
+		elseif ap.duration == FiscalWeek
+			s = y * string("Wk", weekofFY(ap))
+		else 
+			s = ""
+			error("Unrecognized `ap`")
+		end
+	end
+	print(io,s)
+end
 
 depth(ap::AccountingPeriod,d::Integer=0) = ap.duration == FiscalYear ? d : depth(ap.parent,d+1)
 FY(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : FY(ap.parent)
 parent(ap::AccountingPeriod) = ap.duration == FiscalYear ? ap : ap.parent
-
 
 
 isleap(ap::AccountingPeriod) = fc_52or53wks(ap) == 53
@@ -81,7 +100,7 @@ function next(ap::AccountingPeriod{C,D}) where {C,D}
 	dur ∈ (CalendarQuarter, FiscalQuarter) ? 
 	  AccountingPeriod{C}((i%4)+1,dur,i%4 == 0 ? next(par) : par)     :
 	dur ∈ (CalendarMonth, FiscalPeriod)    ? 
-	  (wrap = pdur ∈ (CalendarQuarter,FiscalQuarter) ? 3 : 12;
+	  (wrap = pdur ∈ (CalendarQuarter,FiscalQuarter) ? 3 : 12; # TODO: the 12 number is wrong for ThirteenPeriods Cals
 		 m = i % wrap;
 		 AccountingPeriod{C}(m + 1, dur, m == 0 ? next(par) : par))     :
 	dur ∈ (CalendarWeek, FiscalWeek)       ? 
@@ -89,6 +108,28 @@ function next(ap::AccountingPeriod{C,D}) where {C,D}
 			pdur ∈ (CalendarMonth,FiscalPeriod)    ?  (m=i%fc_4or5wks(par)  ; np = m == 0 ? next(par) : par; m + 1)   : 
 		  pdur ∈ (CalendarQuarter,FiscalQuarter) ?  (m=i%fc_13or14wks(par); np = m == 0 ? next(par) : par; m + 1)   :
 		  pdur ∈ (CalendarYear, FiscalYear)      ?  (m=i%fc_52or53wks(par); np = m == 0 ? next(par) : par; m + 1)   :
+		  error(e),
+		dur,np)                                                         :
+	error(e)
+end
+
+function prev(ap::AccountingPeriod{C,D}) where {C,D}
+	e = "The `AccountingPeriod` has an unrecognized `Duration`."
+	i = ap.index; dur = ap.duration; par = ap.parent; 
+	pdur = isnothing(par) ? nothing : par.duration
+	dur ∈ (CalendarYear, FiscalYear)       ? 
+	  AccountingPeriod{C}(i-1,dur)                                    :
+	dur ∈ (CalendarQuarter, FiscalQuarter) ? 
+	AccountingPeriod{C}(i == 1 ? 4 : mod1(i,4)-1,dur,i == 1 ? prev(par) : par)     :
+	dur ∈ (CalendarMonth, FiscalPeriod)    ? 
+	  (wrap = pdur ∈ (CalendarQuarter,FiscalQuarter) ? 3 : 12; # TODO: the 12 number is wrong for ThirteenPeriods Cals
+		 m = mod1(i,wrap);
+		 AccountingPeriod{C}(i == 1 ? wrap : m - 1, dur, i == 1 ? prev(par) : par))     :
+	dur ∈ (CalendarWeek, FiscalWeek)       ? 
+	  AccountingPeriod{C}(
+			pdur ∈ (CalendarMonth,FiscalPeriod)    ? (wrap = fc_4or5wks(par); m=mod1(i,wrap); np = m == 1 ? prev(par) : par; m == 1 ? wrap : m - 1)  : 
+			pdur ∈ (CalendarQuarter,FiscalQuarter) ? (wrap = fc_13or14wks(par); m=mod1(i,wrap) ; np = m == 1 ? prev(par) : par; m == 1 ? fc_13or14wks(prev(par)) : m - 1)  :
+			pdur ∈ (CalendarYear, FiscalYear)      ? (wrap = fc_52or53wks(par); m=mod1(i,wrap) ; np = m == 1 ? prev(par) : par; m == 1 ? fc_52or53wks(prev(par)) : m - 1)  :
 		  error(e),
 		dur,np)                                                         :
 	error(e)

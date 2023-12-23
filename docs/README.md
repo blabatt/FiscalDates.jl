@@ -12,8 +12,8 @@ A way to represent fiscal calendars.
 
 [cov-i]: https://codecov.io/gh/blabatt/FiscalDates.jl/graph/badge.svg?token=17GZCUYW2N
 [cov-u]: https://codecov.io/gh/blabatt/FiscalDates.jl
-[ci-i]: https://github.com/blabatt/mg-proforma/actions/workflows/CI.yml/badge.svg
-[ci-u]: https://github.com/blabatt/mg-proforma/actions?query=workflow%3ACI
+[ci-i]: https://github.com/blabatt/FiscalDates.jl/actions/workflows/CI.yml/badge.svg
+[ci-u]: https://github.com/blabatt/FiscalDates.jl/actions?query=workflow%3ACI
 
 [doc-i]: https://img.shields.io/badge/docs-stable-blue?style=plastic
 [doc-u]: file:///home/blabattiii/Projects/vesta/microgrids/Proforma/docs/build/index.html 

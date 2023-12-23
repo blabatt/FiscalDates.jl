@@ -14,9 +14,9 @@ layout {
 			pane name="cheatsheets" 
 		}
     }
-    tab name="FiscalDates" cwd="/home/blabattiii/Projects/vesta/microgrids/FiscalDates" {
+    tab name="FiscalDates.jl" cwd="/home/blabattiii/Projects/vesta/systems/FiscalDates.jl" {
 		floating_panes {
-			pane cwd="/home/blabattiii/Projects/vesta/microgrids/FiscalDates" name="terminal" {
+			pane cwd="/home/blabattiii/Projects/vesta/systems/FiscalDates.jl" name="terminal" {
 				x "25%"
 				y "25%"
 				width "50%"
