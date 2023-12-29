@@ -11,11 +11,11 @@ export isleap, offsetofFY, FY, periodofquarter, periodicity
 
 The time period with reference to which financial statements are prepared.
 
-Parameter `C` is a concrete subtype of [`FiscalCalendar`](@ref).
+Parameter `C` is a concrete subtype of [`FiscalCalendar`](@ref). Parameter `D` is a variant of the [`Duration`](@ref) enum.
 
 When instantiated, an object of this type is read as "the (index)th (duration) of (parent)" for the given `FiscalCalendar`. Concretely, this becomes something like "the 2nd period of FY2023" where FY2023 is itself an `AccountingPeriod` with no parent, namely "the 2023rd year of nothing."
 
-The use of this term to indicate concrete time frames is consistent with the definitions provided on wikipedia (https://en.wikipedia.org/wiki/Accounting_period) and accountingcoach.com (https://www.accountingcoach.com/blog/what-is-an-accounting-period).
+The use of this term to indicate concrete time frames is consistent with the definitions provided on [wikipedia](https://en.wikipedia.org/wiki/Accounting_period) and [accountingcoach](https://www.accountingcoach.com/blog/what-is-an-accounting-period).
 """
 struct AccountingPeriod{C,D}
 	index::Int64

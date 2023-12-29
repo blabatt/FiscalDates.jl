@@ -38,7 +38,8 @@ fy2027p2w4     = AccountingPeriod{cal}(4,FiscalWeek,fy2027p2)
 fy2027p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2027p12)  
 fy2022p12w2    = AccountingPeriod{cal}(2,FiscalWeek,fy2022p12)  
 fy2022p12w3    = AccountingPeriod{cal}(3,FiscalWeek,fy2022p12)  
-ar = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
+ar     = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeriod{cal}(12,FiscalPeriod,fy2025))
+ar_yrs = AccountingRange(fy2022,fy2027)
 @test firstday(fy2022q4p3)                    == Date(2022,6,26)
 @test lastday(fy2022)                         == Date(2022,7,30)              
 @test firstday(fy2024)                        == Date(2023,7,30)              
@@ -98,6 +99,7 @@ ar = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeri
 @test next(fy2027w53)                         == fy2028w1                              
 @test prev(next(fy2027w53))                   == fy2027w53                             
 @test length(ar)                              == 9 + 12 + 1
+@test length(ar_yrs)                          == 2027 - 2022
 # for ap in ar
 # 	println("FY", FiscalDates.FY(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
 # end
