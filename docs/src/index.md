@@ -46,40 +46,31 @@ PeriodDurations
 ```
 
 ```@docs
-ThirteenPeriods
-```
-
-```@docs
-  FourFourFive
-```
-
-```@docs
-  FourFiveFour
-```
-
-```@docs
-  FiveFourFour
-```
-
-
-```@docs
 Duration
 ```
 
 ```@docs
-FiscalWeek
+FY
 ```
 
 ```@docs
-FiscalQuarter
+isleap
 ```
 
 ```@docs
-FiscalPeriod
+next
 ```
 
 ```@docs
-FiscalWeek
+prev
+```
+
+```@docs
+offsetofFY
+```
+
+```@docs
+periodofquarter
 ```
 
 ```@index

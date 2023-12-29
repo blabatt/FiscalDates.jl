@@ -2,7 +2,7 @@ import Base.isless, Base.iterate
 
 export FiscalYearend, LastIn, ClosestTo
 export FiscalCal5253
-export firstday
+export firstday, periodofFY, weekofFY
 
 """
     @enum FiscalYearend begin
@@ -10,7 +10,7 @@ export firstday
         ClosestTo
 		end
 
-Description of how to choose the specific day that terminates the [`FiscalYear`](@ref) of a [`FiscalCal5253`](@ref) calendar.
+Description of how to choose the specific day that terminates the `FiscalYear` of a [`FiscalCal5253`](@ref) calendar.
 """
 @enum FiscalYearend begin
 	LastIn
@@ -25,6 +25,11 @@ lastdowofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D} = C.parameters
 usinglastdayinCMlogic(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D} = C.parameters[3] == LastIn 
 
 
+"""
+    lastday(ap::AccountingPeriod)
+
+Retrieve the last calendar day of the given [`AccountingPeriod`](@ref).
+"""
 function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal5253} 
 	fy = FY(ap).index; m = lastmonthofFY(ap); dow = lastdowofFY(ap)
 	ds = Date(fy,m,1); dl = ds + Dates.Day(daysinmonth(ds) - 1); Δ = dayofweek(dl) - dow
@@ -38,6 +43,13 @@ function lastday(ap::AccountingPeriod{C,FiscalYear})::Date where {C<:FiscalCal52
 	end
 end
 
+"""
+    periodofFY(ap::AccountingPeriod)
+
+Retrieve the `FiscalPeriod` of the given [`AccountingPeriod`](@ref).
+
+The operation is fallible for argument `ap` that is an [`AccountingPeriod`] at a coarser grain than a `FiscalPeriod`.
+"""
 function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D}
 	dur = ap.duration
 	if dur ∉ (FiscalPeriod, CalendarMonth, FiscalWeek, CalendarWeek)
@@ -61,10 +73,22 @@ function periodofFY(ap::AccountingPeriod{C,D}) where {C<:FiscalCal5253,D}
 end
 
 
+"""
+    periodofquarter(ap::AccountingPeriod{C,FiscalPeriod}) where C
+
+Retrieve the offset of the `FiscalPeriod` within its encompassing `FiscalQuarter`.
+
+The response is an `Integer` offset.
+"""
 function periodofquarter(ap::AccountingPeriod{C,FiscalPeriod}) where {C<:FiscalCal5253}
 		periodofFY(ap) == 13 ? 4 : mod1(periodofFY(ap),3)
 end
 
+"""
+    weekofFY(ap::AccountingPeriod)
+
+Retrieve the `FiscalWeek` of the given [`AccountingPeriod`](@ref).
+"""
 function weekofFY(ap::AccountingPeriod{C,FiscalWeek}) where {C<:FiscalCal5253}
 	p = parent(ap)
 	if p.duration ∈ (CalendarYear, FiscalYear)

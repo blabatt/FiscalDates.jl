@@ -27,11 +27,11 @@ layout {
 			pane stacked=true size="60%" {
 				pane name="edit" size="60%" focus=true cwd="./" { 
 					command "nvim"
-					args "src/FiscalDates.jl" "src/FiscalCal445.jl" "src/FiscalCalGregorian.jl" "src/FiscalCalISO.jl" "src/FiscalCalBroadcast.jl" "src/AccountingPeriod.jl" "src/AccountingRange.jl"
+					args "src/FiscalDates.jl" "src/FiscalCal5253.jl" "src/FiscalCalGregorian.jl" "src/FiscalCalISO.jl" "src/FiscalCalBroadcast.jl" "src/AccountingPeriod.jl" "src/AccountingRange.jl"
 				}
 				pane cwd="./test" name="testing" {
 					command "nvim"
-					args "runtests.jl" "FiscalCal445.jl" "FiscalCalGregorian.jl" "FiscalCalISO.jl" "FiscalCalBroadcast.jl"
+					args "runtests.jl" "FiscalCal5253.jl" "FiscalCalGregorian.jl" "FiscalCalISO.jl" "FiscalCalBroadcast.jl"
 				}
 				pane cwd="./" name="environment" {
 					command "nvim"
@@ -39,7 +39,7 @@ layout {
 				}
 				pane cwd="./docs" name="documentation" {
 					command "nvim"
-					args "make.jl" "README.md" "src/index.md"
+					args "make.jl" "src/index.md" "README.md"
 				}
 				pane cwd=".github/workflows" name="cicd" {
 					command "nvim"

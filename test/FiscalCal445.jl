@@ -4,6 +4,8 @@ using Test
 
 
 cal            = FiscalCal5253{Saturday,July,LastIn,FourFourFive}
+fy2021         = AccountingPeriod{cal}(2021,FiscalYear)
+fy2022         = AccountingPeriod{cal}(2022,FiscalYear)
 fy2022         = AccountingPeriod{cal}(2022,FiscalYear)
 fy2023         = AccountingPeriod{cal}(2023,FiscalYear)
 fy2024         = AccountingPeriod{cal}(2024,FiscalYear)
@@ -46,6 +48,10 @@ ar = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeri
 @test lastday(fy2022q4p3w2)                   == Date(2022,7,09)              
 @test FiscalDates.FY(fy2024)                  == fy2024                         
 @test FiscalDates.FY(fy2022q4p3)              == fy2022                         
+@test FiscalDates.FY(cal,Date(2023,12,11))    == fy2024                         
+@test FiscalDates.FY(cal,Date(2022,7,30))     == fy2022                         
+@test FiscalDates.FY(cal,firstday(fy2022))    == fy2022                         
+@test FiscalDates.FY(cal,firstday(fy2022) - Dates.Day(1))    == fy2021                         
 @test FiscalDates.quarterofFY(fy2022q4p3w2)   == 4                            
 @test FiscalDates.periodofFY(fy2022q4p3w2)    == 12                           
 @test FiscalDates.periodofFY(fy2022q4p3)      == 12                           
@@ -92,9 +98,9 @@ ar = AccountingRange(AccountingPeriod{cal}(3,FiscalPeriod,fy2024),AccountingPeri
 @test next(fy2027w53)                         == fy2028w1                              
 @test prev(next(fy2027w53))                   == fy2027w53                             
 @test length(ar)                              == 9 + 12 + 1
-for ap in ar
-	println("FY", FiscalDates.FY(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
-end
+# for ap in ar
+# 	println("FY", FiscalDates.FY(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
+# end
 @test repr(ar)                                == "From FY2024P3 to FY2025P12\n"
 
 

@@ -3,7 +3,7 @@ using Dates
 
 export Duration, FiscalYear, CalendarYear, FiscalQuarter, CalendarQuarter, FiscalPeriod, CalendarMonth, FiscalWeek, CalendarWeek
 export PeriodDurations, ThirteenPeriods, FourFourFive, FourFiveFour, FiveFourFour
-export FiscalCalendar, FiscalCal445, FiscalCalGregorian, FiscalCalISO, FiscalCalBroadcast
+export FiscalCalendar, FiscalCal5253, FiscalCalGregorian, FiscalCalISO, FiscalCalBroadcast
 export firstday, lastday
 
 
@@ -24,7 +24,6 @@ Abstract concepts of a time duration with no specifics provided.
 Calendar years and months, as well as fiscal years and periods, all stretch over a varying number of days. As such, these are not strict measurements; they are, rather, context-dependent time durations.
 """
 @enum Duration begin
-
 	FiscalYear
 	CalendarYear
 	FiscalQuarter
@@ -44,7 +43,7 @@ end
         FiveFourFour
     end
 
-The periodicity of the durations, in weeks, of successive [`FiscalPeriod`](@ref)s in a [`FiscalYear`](@ref).
+The periodicity of the durations, in weeks, of successive `FiscalPeriod`s in a `FiscalYear`.
 """
 @enum PeriodDurations begin
   ThirteenPeriods
@@ -57,7 +56,7 @@ end
 """
     abstract type FiscalCalendar
 
-Concrete implementations may be parametric, such as [`FiscalCalGregorian`](@ref), parameterized by a specific `Date` and [`FiscalCal445`](@ref), parameterized by an ending month as well as a couple other factors, or the may be singleton types, such as [`FiscalCalISO`](@ref) and [`FiscalCalBroadcast]`(@ref). In either case, significant work must be done to implement a new `FiscalCalendar`. 
+Concrete implementations may be parametric, such as [`FiscalCalGregorian`](@ref), parameterized by a specific `Date` and [`FiscalCal5253`](@ref), parameterized by an ending month as well as a couple other factors, or the may be singleton types, such as [`FiscalCalISO`](@ref) and [`FiscalCalBroadcast]`(@ref). In either case, significant work must be done to implement a new `FiscalCalendar`. 
 
 The following functions must have method implementations specific to the new concrete type (here called `NEW_C`): 
 * `lastday(::AccountingPeriod{NEW_C,FiscalYear})`
@@ -78,7 +77,7 @@ abstract type FiscalCalendar end
 
 Commonly-used [`FiscalCalendar`](@ref) with 52 or 53 week periods. 
 
-[`FiscalWeek`](@ref)s always begins on the same day of the week. `FiscalCal5253`s are parameterized by the logic used to determine the final day of any [`FiscalYear`](@ref). These parameters include: a day of the week, `D` that the fiscal year ends on; a calendar month of the year, `M`, that the fiscal year ends on; and `T`, a `Bool` that indicates how to terminate each `FiscalYear` given `D` and `M`. The duration of its [`FiscalPeriod`](@ref)s is indicated by type parameter `P`. See more details [here](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar).
+`FiscalWeek`s always begins on the same day of the week. `FiscalCal5253`s are parameterized by the logic used to determine the final day of any `FiscalYear`. These parameters include: a day of the week, `D` that the fiscal year ends on; a calendar month of the year, `M`, that the fiscal year ends on; and `T`, a `Bool` that indicates how to terminate each `FiscalYear` given `D` and `M`. The duration of its `FiscalPeriod`s is indicated by type parameter `P`. See more details [here](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar).
 """
 struct FiscalCal5253{D,M,T,P} <: FiscalCalendar
 end
