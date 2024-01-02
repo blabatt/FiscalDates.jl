@@ -36,7 +36,7 @@ end
 Return the length of the given iterator, in units of `FiscalYear`s.
 """
 function Base.length(ar::AccountingRange{C,FiscalYear}) where {C<:FiscalCalendar}
-  FY(ar.to).index - FY(ar.from).index
+  FY(ar.to).index - FY(ar.from).index + 1
 end
 
 function Base.show(io::IO,ar::AccountingRange)
