@@ -99,7 +99,7 @@ ar_yrs = AccountingRange(fy2022,fy2027)
 @test next(fy2027w53)                         == fy2028w1                              
 @test prev(next(fy2027w53))                   == fy2027w53                             
 @test length(ar)                              == 9 + 12 + 1
-@test length(ar_yrs)                          == 2027 - 2022
+@test length(ar_yrs)                          == 2027 - 2022 + 1
 # for ap in ar
 # 	println("FY", FiscalDates.FY(ap).index, ap.duration, ap.index, " from: ", firstday(ap), " to ", lastday(ap))
 # end

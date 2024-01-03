@@ -54,6 +54,14 @@ FY
 ```
 
 ```@docs
+firstday
+```
+
+```@docs
+lastday
+```
+
+```@docs
 isleap
 ```
 

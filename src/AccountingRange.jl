@@ -23,7 +23,7 @@ end
 
 Return the length of the given iterator.
 """
-function Base.length(ar::AccountingRange{C,FiscalPeriod}) where {C<:FiscalCalendar}
+function length(ar::AccountingRange{C,FiscalPeriod}) where {C<:FiscalCalendar}
 	ppy = typeof(ar.from).parameters[1] <: FiscalCal5253 &&
 	      typeof(ar.from).parameters[1].parameters[4] == ThirteenPeriods ?
 				13 : 12
@@ -35,7 +35,7 @@ end
 
 Return the length of the given iterator, in units of `FiscalYear`s.
 """
-function Base.length(ar::AccountingRange{C,FiscalYear}) where {C<:FiscalCalendar}
+function length(ar::AccountingRange{C,FiscalYear}) where {C<:FiscalCalendar}
   FY(ar.to).index - FY(ar.from).index + 1
 end
 

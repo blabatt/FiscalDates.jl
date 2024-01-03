@@ -2,7 +2,7 @@ import Base.isless, Base.iterate, Base.show
 
 export AccountingPeriod
 export next, prev, timeframe
-export firstday
+export firstday, lastday
 export isleap, offsetofFY, FY, periodofquarter, periodicity
 
 
@@ -153,7 +153,7 @@ end
 
 Retrieves the sequential [`AccountingPeriod`](@ref) that preceeds the given one.
 
-This is the natural inverse of [`next`](@ref): 
+This is the natural inverse of [`next`](@ref):
     ap = AccountingPeriod(...)
     ap == prev(next(ap))
 """
