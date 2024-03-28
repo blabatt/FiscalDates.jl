@@ -98,6 +98,8 @@ ar_yrs = AccountingRange(fy2022,fy2027)
 @test next(fy2022q3)                          == fy2022q4                             
 @test next(fy2027w53)                         == fy2028w1                              
 @test prev(next(fy2027w53))                   == fy2027w53                             
+@test in(Date(2024,12,17),ar)                 == true
+@test in(Date(2027,1,1),  ar)                 == false
 @test length(ar)                              == 9 + 12 + 1
 @test length(ar_yrs)                          == 2027 - 2022 + 1
 # for ap in ar

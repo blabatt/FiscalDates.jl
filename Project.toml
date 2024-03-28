@@ -1,7 +1,7 @@
 name = "FiscalDates"
 uuid = "2905af26-c776-4238-8401-0c0e8e7376c2"
 authors = ["Blair Labatt <blabattiii@gmail.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"

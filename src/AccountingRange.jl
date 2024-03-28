@@ -1,6 +1,6 @@
-import Base.iterate, Base.length, Base.show
+import Base.iterate, Base.length, Base.show, Base.in
 export AccountingRange
-export length
+export length, firstday, in
 
 """
     struct AccountingRange
@@ -14,9 +14,17 @@ struct AccountingRange{C,D}
 	to::AccountingPeriod{C,D}
 end
 first(ar::AccountingRange)::AccountingPeriod = ar.from
+last(ar::AccountingRange)::AccountingPeriod  = ar.to
 function Base.iterate(ar::AccountingRange, state=first(ar))
 	state > ar.to ? nothing : ( n = next(state); (state , n) )
 end
+
+
+firstday(ar::AccountingRange) = firstday(first(ar))
+lastday(ar::AccountingRange)  = lastday(last(ar))
+in(d::Date,per::AccountingPeriod) = firstday(per) ≤ d ≤ lastday(per)
+in(d::Date,ar::AccountingRange)   = firstday(ar)  ≤ d ≤ lastday(ar)
+
 
 """
     length(ar::AccountingRange)
