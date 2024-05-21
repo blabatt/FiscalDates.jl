@@ -117,7 +117,7 @@ function Base.isless(ap1::AccountingPeriod{C,D1},ap2::AccountingPeriod{C,D2}) wh
 	ap1fy = FY(ap1).index; ap2fy = FY(ap2).index
 	ap1fy ≠ ap2fy   ? ap1fy < ap2fy                      :
 	D1 == D2        ? offsetofFY(ap1) < offsetofFY(ap2)  :
-                    offsetofFY(ap1) < offsetofFY(ap2) # TODO: BUG: (?) comparing offsets of different durations?!
+  firstday(ap1) < firstday(ap2)
 end
 
 

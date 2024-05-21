@@ -31,7 +31,7 @@ layout {
 				}
 				pane cwd="./test" name="testing" {
 					command "nvim"
-					args "runtests.jl" "FiscalCal5253.jl" "FiscalCalGregorian.jl" "FiscalCalISO.jl" "FiscalCalBroadcast.jl"
+					args "runtests.jl" "ancillary_functions.jl" "FiscalCal5253.jl" "FiscalCalGregorian.jl" "FiscalCalISO.jl" "FiscalCalBroadcast.jl"
 				}
 				pane cwd="./" name="environment" {
 					command "nvim"

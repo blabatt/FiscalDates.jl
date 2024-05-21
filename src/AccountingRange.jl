@@ -24,6 +24,9 @@ firstday(ar::AccountingRange) = firstday(first(ar))
 lastday(ar::AccountingRange)  = lastday(last(ar))
 in(d::Date,per::AccountingPeriod) = firstday(per) ≤ d ≤ lastday(per)
 in(d::Date,ar::AccountingRange)   = firstday(ar)  ≤ d ≤ lastday(ar)
+function in(per::AccountingPeriod,ar::AccountingRange)
+  firstday(ar) ≤ firstday(per) && lastday(ar) ≥ lastday(per)
+end
 
 
 """
